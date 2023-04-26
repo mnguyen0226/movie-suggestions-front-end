@@ -57,19 +57,28 @@ export default {
 
 			return anime;
 		},
+    async getMovies() {
+      const movies = await fetch("http://localhost:3000/home-page", {}).then((response)=>(response.json()))
+      return movies
+    },
 		handleScroll() {
 			if (
 				window.scrollY + window.innerHeight >=
 				document.body.scrollHeight - 50
 			) {
-				const new_anime = this.getAnime();
-
-				this.anime_list = [...this.anime_list, ...new_anime];
+        this.getMovies().then((response)=>{
+          console.log(response)
+          this.anime_list = [...this.anime_list, ...response]
+        });
+				// this.anime_list = [...this.anime_list, ...new_anime];
 			}
 		},
 	},
 	mounted() {
-		this.anime_list = this.getAnime();
+		this.anime_list = this.getMovies().then((response)=>{
+      console.log("checking on first init",response)
+      this.anime_list = response
+    });
 		window.addEventListener("scroll", this.handleScroll);
 	},
 };
