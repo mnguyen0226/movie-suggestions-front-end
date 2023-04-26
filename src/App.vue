@@ -85,7 +85,7 @@ export default {
 
   <div class="parent">
 
-    <div class="item" style="color:black; text-align: center;">
+    <div class="item-left" style="color:black; text-align: center;">
       <h2>Select Recommendation Systems</h2>
       &nbsp;
       <div class="btn-group-vertical">
@@ -98,7 +98,7 @@ export default {
 
     </div>
     
-    <div class="item last" style="text-align: center;">
+    <div class="item-right last" style="text-align: center;">
       <h2>Select Movies</h2>
       &nbsp;
       <Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" />
@@ -143,8 +143,16 @@ main {
   font-family: arial, sans-serif;
 }
 
-.item {
-  width: 50%;
+.item-left {
+  width: 25%;
+  padding: 2em;
+  color: #ffffff;
+  background: #eeeeee;
+  min-height: 500px;
+}
+
+.item-right {
+  width: 75%;
   padding: 2em;
   color: #ffffff;
   background: #eeeeee;
