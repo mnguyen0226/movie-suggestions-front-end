@@ -79,8 +79,8 @@ export default {
 </script>
 
 <template>
-  <header>
-    <h1>My Home Page</h1>
+  <header class="sticky">
+    <h1 >My Home Page</h1>
   </header>
 
   <div class="parent">
@@ -95,7 +95,6 @@ export default {
         &nbsp;
         <button type="button" class="btn btn-secondary rounded">Most-watched + Stakeholder-paid Movies</button>
       </div>
-
     </div>
     
     <div class="item-right last" style="text-align: center;">
@@ -145,6 +144,9 @@ main {
 
 .item-left {
   width: 25%;
+  height: 100%;
+  position:fixed;
+
   padding: 2em;
   color: #ffffff;
   background: #eeeeee;
@@ -152,7 +154,11 @@ main {
 }
 
 .item-right {
-  width: 75%;
+  width: 65%;
+  flex: 1;
+  margin-left: 25%;
+
+  
   padding: 2em;
   color: #ffffff;
   background: #eeeeee;
@@ -168,4 +174,9 @@ main {
   display: block;
 }
 
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%
+}
 </style>
