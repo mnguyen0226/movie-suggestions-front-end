@@ -1,16 +1,16 @@
 <template>
 	<article>
-		<h2>{{ anime.title }}</h2>
+		<h2>{{ movie.title }}</h2>
 		<p>
-			{{ anime.description }}
+			{{ movie.description }}
 		</p>
 	</article>
 </template>
 
 <script>
-// bring anime prop
+// bring movie prop
 export default {
-	props: ["anime"],
+	props: ["movie"],
 };
 </script>
 

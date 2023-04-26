@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<header>
-			<h1>My Movie Feed</h1>
+			<h1>My Movies Feed</h1>
 		</header>
 		<main>
       <!-- Create articles -->
-			<Post v-for="(anime, i) in anime_list" :key="i" :anime="anime" />
+			<Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" />
 		</main>
 	</div>
 </template>
@@ -18,16 +18,15 @@ export default {
 	name: "App",
 	data() {
 		return {
-			anime_list: [],
+			movie_list: [],
 		};
 	},
 	components: {
 		Post,
 	},
 	methods: {
-    // anime
-		getAnime() {
-			const anime_titles = [
+		getMovie() {
+			const movie_titles = [
 				"Naruto",
 				"Demon Slayer",
 				"Dragon Ball",
@@ -43,24 +42,26 @@ export default {
 				"Hunter x Hunter",
 			];
 
-			const anime = [];
+			const movie = [];
 
 			for (let i = 0; i < 10; i++) {
-				anime.push({
-					title: anime_titles[
-						Math.floor(Math.random() * anime_titles.length)
+				movie.push({
+					title: movie_titles[
+						Math.floor(Math.random() * movie_titles.length)
 					],
 					description:
 						"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 				});
 			}
 
-			return anime;
+			return movie;
 		},
+
     async getMovies() {
       const movies = await fetch("http://localhost:3000/home-page", {}).then((response)=>(response.json()))
       return movies
     },
+
 		handleScroll() {
 			if (
 				window.scrollY + window.innerHeight >=
@@ -68,18 +69,18 @@ export default {
 			) {
         this.getMovies().then((response)=>{
           console.log(response)
-          this.anime_list = [...this.anime_list, ...response]
+          this.movie_list = [...this.movie_list, ...response]
         });
-				// this.anime_list = [...this.anime_list, ...new_anime];
 			}
 		},
 	},
+
 	mounted() {
-		this.anime_list = this.getMovies().then((response)=>{
+		this.movie_list = this.getMovies().then((response)=>{
       console.log("checking on first init",response)
-      this.anime_list = response
+      this.movie_list = response
     });
-		window.addEventListener("scroll", this.handleScroll);
+		window.addEventListener("scroll", this.handleScroll); // if scroll, then function handleScroll() works automatically.
 	},
 };
 </script>

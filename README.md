@@ -6,3 +6,5 @@
 - Project run with Vue CLI
   - npm install -g @vue/cli
   - vue create .
+  - npm run serve <<< RUN
+
