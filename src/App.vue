@@ -1,14 +1,4 @@
-<template>
-	<div>
-		<header>
-			<h1>My Movies Feed</h1>
-		</header>
-		<main>
-      <!-- Create articles -->
-			<Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" />
-		</main>
-	</div>
-</template>
+
 
 <script>
 // import infinite scroll
@@ -63,10 +53,13 @@ export default {
     },
 
 		handleScroll() {
+      console.log("Window Size:", window.scrollY + window.innerHeight);
+      console.log("Threshold: ", document.body.scrollHeight - 50)
 			if (
 				window.scrollY + window.innerHeight >=
 				document.body.scrollHeight - 50
 			) {
+        console.log("activate")
         this.getMovies().then((response)=>{
           console.log(response)
           this.movie_list = [...this.movie_list, ...response]
@@ -84,6 +77,36 @@ export default {
 	},
 };
 </script>
+
+<template>
+  <header>
+    <h1>My Home Page</h1>
+  </header>
+
+  <div class="parent">
+
+    <div class="item" style="color:black; text-align: center;">
+      <h2>Select Recommendation Systems</h2>
+      &nbsp;
+      <div class="btn-group-vertical">
+        <button type="button" class="btn btn-primary rounded">All Movies</button>
+        &nbsp;
+        <button type="button" class="btn btn-secondary rounded">Recommended Movies</button>
+        &nbsp;
+        <button type="button" class="btn btn-secondary rounded">Most-watched + Stakeholder-paid Movies</button>
+      </div>
+
+    </div>
+    
+    <div class="item last" style="text-align: center;">
+      <h2>Select Movies</h2>
+      &nbsp;
+      <Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" />
+    </div>
+  </div>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"></template>
 
 <style>
 * {
@@ -114,4 +137,27 @@ main {
 	max-width: 640px;
 	margin: 0 auto;
 }
+
+.parent {
+  display: flex;
+  font-family: arial, sans-serif;
+}
+
+.item {
+  width: 50%;
+  padding: 2em;
+  color: #ffffff;
+  background: #eeeeee;
+  min-height: 500px;
+}
+
+.last {
+  color: #222;
+  background: #ccc;
+}
+
+.btn-group button {
+  display: block;
+}
+
 </style>
