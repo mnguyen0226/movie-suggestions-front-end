@@ -30,32 +30,20 @@ export const useMovieStore = defineStore("CartStore", {
                 const someList = await fetch("http://localhost:3000/home-page").then((response)=>response.json())
 
                 for(const movie in someList){
-                    if (i == 6){
-                        break;
-                    }
                     this.movie_list.push(someList[movie])
-                    i += 1;
                 }
-                console.log(i);
-
 
             // set suggestion page
             } else if (this.selectedMode == 'suggestion-page'){
-                const someList = await fetch("http://localhost:3000/home-page").then((response)=>response.json())
+                const someList = await fetch("http://localhost:3000/suggestion-page").then((response)=>response.json())
                 
                 for(const movie in someList){
-                    if (i == 5){
-                        break;
-                    }
                     this.movie_list.push(someList[movie])
-                    i += 1;
                 }
-
-                console.log(i);
                 
             // set trending page
             } else if (this.selectedMode == 'trending-page'){
-                const someList = await fetch("http://localhost:3000/home-page").then((response)=>response.json())
+                const someList = await fetch("http://localhost:3000/trending-page").then((response)=>response.json())
 
                 for(const movie in someList){
                     this.movie_list.push(someList[movie])
@@ -66,8 +54,13 @@ export const useMovieStore = defineStore("CartStore", {
                 const someList = await fetch("http://localhost:3000/home-page").then((response)=>response.json())
 
                 for(const movie in someList){
+                    if (i == 5){
+                        break;
+                    }
                     this.movie_list.push(someList[movie])
+                    i += 1;
                 }
+                console.log(i);
             }
             return this.movie_list;
         },

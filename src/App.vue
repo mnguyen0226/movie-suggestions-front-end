@@ -29,9 +29,15 @@ async function setAndMount(mode) {
   // set mode
   movieStore.setSelectedMode(mode)
 
-  // 
+  // fetch movie
   movieStore.fetchMovies();
   window.addEventListener('scroll', handleScroll);
+
+  // make the database unique
+  // for each movie, find the event that show (start and end) OnFocus vs OutFocus
+  // then attach function
+  // Hashmap => Out of focus.
+
 }
 
 </script>
