@@ -5,11 +5,10 @@
 import Post from "./components/MyPost.vue";
 import { useMovieStore } from "@/stores/movieStore";
 
-import { onMounted,ref } from 'vue'
+import { onMounted } from 'vue'
 
 
 const movieStore=useMovieStore();
-var movieList=ref([])
 async function handleScroll() {
       console.log("Window Size:", window.scrollY + window.innerHeight);
       console.log("Threshold: ", document.body.scrollHeight - 50)
@@ -18,13 +17,13 @@ async function handleScroll() {
 				document.body.scrollHeight - 50
 			) {
         console.log("activate")
-        var newMovieList=await movieStore.fetchMovies();
-        movieList.value=movieList.value.concat(newMovieList);
+        await movieStore.fetchMovies();
+
 			}
     }
 
 onMounted(async () => {
-  movieList.value=await movieStore.fetchMovies();
+  await movieStore.fetchMovies();
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -51,7 +50,7 @@ onMounted(async () => {
     <div class="item-right last" style="text-align: center;">
       <h2>Select Movies</h2>
       &nbsp;
-      <Post v-for="(movie, i) in movieList" :key="i" :movie="movie" />
+      <Post v-for="(movie, i) in movieStore.getMovies" :key="i" :movie="movie" />
     </div>
   </div>
 
