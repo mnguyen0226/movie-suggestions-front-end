@@ -5,13 +5,11 @@
 import Post from "./components/MyPost.vue";
 import { useMovieStore } from "@/stores/movieStore";
 
-import { onMounted } from 'vue'
+// import { onMounted } from 'vue'
 
+const movieStore = useMovieStore();
 
-const movieStore=useMovieStore();
 async function handleScroll() {
-      console.log("Window Size:", window.scrollY + window.innerHeight);
-      console.log("Threshold: ", document.body.scrollHeight - 50)
 			if (
 				window.scrollY + window.innerHeight >=
 				document.body.scrollHeight - 50
@@ -22,10 +20,20 @@ async function handleScroll() {
 			}
     }
 
-onMounted(async () => {
-  await movieStore.fetchMovies();
-  window.addEventListener('scroll', handleScroll)
-})
+// onMounted(async () => {
+//   await movieStore.fetchMovies();
+//   window.addEventListener('scroll', handleScroll)
+// })
+
+async function setAndMount(mode) {
+  // set mode
+  movieStore.setSelectedMode(mode)
+
+  // 
+  movieStore.fetchMovies();
+  window.addEventListener('scroll', handleScroll);
+}
+
 </script>
 
 <template>
@@ -38,12 +46,19 @@ onMounted(async () => {
     <div class="item-left" style="color:black; text-align: center;">
       <h2>Select Recommendation Systems</h2>
       &nbsp;
+
       <div class="btn-group-vertical">
-        <button type="button" class="btn btn-primary rounded">All Movies</button>
+        <button type="button" class="btn btn-primary rounded" @click="setAndMount('home-page')">
+          All Movies
+        </button>
         &nbsp;
-        <button type="button" class="btn btn-secondary rounded">Recommended Movies</button>
+        <button type="button" class="btn btn-secondary rounded" @click="setAndMount('suggestion-page')">
+          Recommended Movies
+        </button>
         &nbsp;
-        <button type="button" class="btn btn-secondary rounded">Most-watched + Stakeholder-paid Movies</button>
+        <button type="button" class="btn btn-secondary rounded" @click="setAndMount('trending-page')">
+          Most-watched + Stakeholder-paid Movies
+        </button>
       </div>
     </div>
     
