@@ -1,58 +1,16 @@
 
 
-<script>
+<script setup>
 // import infinite scroll
 import Post from "./components/MyPost.vue";
+import { useMovieStore } from "@/stores/movieStore";
 
-export default {
-	name: "App",
-	data() {
-		return {
-			movie_list: [],
-		};
-	},
-	components: {
-		Post,
-	},
-	methods: {
-		getMovie() {
-			const movie_titles = [
-				"Naruto",
-				"Demon Slayer",
-				"Dragon Ball",
-				"My Hero Academia",
-				"Sword Art Online",
-				"Tokyo Ghoul",
-				"Darling in the Franxx",
-				"Code Geass",
-				"One Piece",
-				"Fairy Tail",
-				"Bleach",
-				"Attack on Titan",
-				"Hunter x Hunter",
-			];
+import { onMounted } from 'vue'
 
-			const movie = [];
 
-			for (let i = 0; i < 10; i++) {
-				movie.push({
-					title: movie_titles[
-						Math.floor(Math.random() * movie_titles.length)
-					],
-					description:
-						"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-				});
-			}
+const movieStore=useMovieStore();
 
-			return movie;
-		},
-
-    async getMovies() {
-      const movies = await fetch("http://localhost:3000/home-page", {}).then((response)=>(response.json()))
-      return movies
-    },
-
-		handleScroll() {
+async function handleScroll() {
       console.log("Window Size:", window.scrollY + window.innerHeight);
       console.log("Threshold: ", document.body.scrollHeight - 50)
 			if (
@@ -60,22 +18,14 @@ export default {
 				document.body.scrollHeight - 50
 			) {
         console.log("activate")
-        this.getMovies().then((response)=>{
-          console.log(response)
-          this.movie_list = [...this.movie_list, ...response]
-        });
+        await movieStore.fetchMovies();
 			}
-		},
-	},
+    }
 
-	mounted() {
-		this.movie_list = this.getMovies().then((response)=>{
-      console.log("checking on first init",response)
-      this.movie_list = response
-    });
-		window.addEventListener("scroll", this.handleScroll); // if scroll, then function handleScroll() works automatically.
-	},
-};
+onMounted(async () => {
+  await movieStore.fetchMovies();
+  window.addEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
@@ -100,7 +50,7 @@ export default {
     <div class="item-right last" style="text-align: center;">
       <h2>Select Movies</h2>
       &nbsp;
-      <Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" />
+      <Post v-for="(movie, i) in movieStore.getMovies" :key="i" :movie="movie" />
     </div>
   </div>
 
