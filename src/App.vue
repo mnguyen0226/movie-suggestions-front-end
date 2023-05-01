@@ -5,7 +5,7 @@
 import Post from "./components/MyPost.vue";
 import { useMovieStore } from "@/stores/movieStore";
 
-// import { onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 const movieStore = useMovieStore();
 
@@ -14,16 +14,21 @@ async function handleScroll() {
 				window.scrollY + window.innerHeight >=
 				document.body.scrollHeight - 50
 			) {
-        console.log("activate")
+        console.log("handleScroll activate")
         await movieStore.fetchMovies();
 
 			}
     }
 
-// onMounted(async () => {
-//   await movieStore.fetchMovies();
-//   window.addEventListener('scroll', handleScroll)
-// })
+onMounted(async () => {
+  //   await movieStore.fetchMovies();
+
+  // track-implementation
+  await movieStore.mounted(); 
+  window.addEventListener('scroll', handleScroll)
+})
+
+
 
 async function setAndMount(mode) {
   // set mode
@@ -31,14 +36,11 @@ async function setAndMount(mode) {
 
   // fetch movie
   movieStore.fetchMovies();
+
   window.addEventListener('scroll', handleScroll);
-
-  // make the database unique
-  // for each movie, find the event that show (start and end) OnFocus vs OutFocus
-  // then attach function
-  // Hashmap => Out of focus.
-
 }
+
+
 
 </script>
 
@@ -71,7 +73,7 @@ async function setAndMount(mode) {
     <div class="item-right last" style="text-align: center;">
       <h2>Select Movies</h2>
       &nbsp;
-      <Post v-for="(movie, i) in movieStore.getMovies" :key="i" :movie="movie" />
+      <Post v-for="(movie, i) in movieStore.getMovies" :key="i" :movie="movie" ref="itemRefs[i]"/>
     </div>
   </div>
 
