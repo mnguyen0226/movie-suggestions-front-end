@@ -1,20 +1,47 @@
 <template>
-	<article>
+	<article ref="article">
 		<h2>{{ movie.title }}</h2>
-		<p>
-			{{ movie.description }}
-		</p>
+		<p>{{ movie.description }}</p>
 	</article>
 </template>
-
+  
 <script>
-// bring movie prop
+/* eslint-disable */
+import { defineProps, onMounted, onUnmounted ,ref} from "vue";
+
+const props = defineProps({
+	movie: Object,
+});
+
 export default {
 	props: ["movie"],
+	setup(props) {
+		const articleRef = ref(null);
+		let startTime;
+
+		const observer = new IntersectionObserver((entries) => {
+			if (entries[0].isIntersecting) {
+				startTime = performance.now();
+			} else {
+				const timeInView = performance.now() - startTime;
+				console.log("Time spent in view:" + timeInView + entries)
+				// send timeInView to your analytics or tracking service
+			}
+		});
+
+		onMounted(() => {
+			observer.observe(articleRef.value);
+		});
+
+		onUnmounted(() => {
+			observer.disconnect();
+		});
+
+		return { articleRef };
+	},
 };
 </script>
-
-
+  
 <style>
 article {
 	background-color: #efefef;
@@ -29,3 +56,4 @@ article h2 {
 	margin-bottom: 1rem;
 }
 </style>
+  
