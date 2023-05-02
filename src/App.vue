@@ -1,7 +1,6 @@
 
 
 <script>
-// import infinite scroll
 import Post from "./components/MyPost.vue";
 
 export default {
@@ -9,73 +8,36 @@ export default {
   data() {
     return {
       movie_list: [],
-
       current_tab: "home-page",
-      // Declare as many ever maps that you want for bookkeeping
-      // movie_id, title, description, categories, image, actors, current_recommended_rate
-      movie_id_list: [],
-
-      // individual session
-          // movies[movie_id] = {
-          //   title
-          //   description
-          //   categories
-          //   image 
-          //   actors
-          //   current_recommended_rate
-          //   session[session_id] [
-          //     start-time, end-time, duration
-          //     ] // 1 session id for 1 user
-          //   }
-          // }
-
-      // create a hashmap of user in terms of what list of all attributes they visted => Use the hashmap to log 
-          // user[session_id] = {
-          //   movie_id[] = [1 2 3 4 5] # hashset
-          // }
+      post_call_bk: {}, // book keeping
     };
   },
   components: {
     Post,
   },
   methods: {
-    getMovie() {
-      const movie_titles = [
-        "Naruto",
-        "Demon Slayer",
-        "Dragon Ball",
-        "My Hero Academia",
-        "Sword Art Online",
-        "Tokyo Ghoul",
-        "Darling in the Franxx",
-        "Code Geass",
-        "One Piece",
-        "Fairy Tail",
-        "Bleach",
-        "Attack on Titan",
-        "Hunter x Hunter",
-      ];
-
-      const movie = [];
-
-    //  function getCurrentUserID() {
-    //    //if the cookie is empty
-    //    // if empty fabircate and id and set in cooke
-    //    //return from cookie UUID
-    // https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
-    //   }
-
-      for (let i = 0; i < 10; i++) {
-        movie.push({
-          title: movie_titles[
-            Math.floor(Math.random() * movie_titles.length)
-          ],
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        });
+    getCurrentUserID() {
+      if (!localStorage.getItem('userID')) { // Check if the localStorage item is empty
+        let uuid = this.generateUUID(); // Generate a new UUID
+        localStorage.setItem('userID', uuid); // Set the new UUID in localStorage
+        return uuid; // Return the new UUID
+      } else {
+        return localStorage.getItem('userID'); // Return the UUID from localStorage
       }
+    },
 
-      return movie;
+    generateUUID() {
+      let d = new Date().getTime();
+      let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        let r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+      return uuid;
+    },
+
+    notifyEvent(post_id, time_diff, user_id, now_time){
+      console.log("Notify Event Call: " + post_id + " TD: " +  time_diff + " UI: " + user_id + " NT: "+ now_time)
     },
 
     async getMovies() {
@@ -88,35 +50,34 @@ export default {
       /*eslint-disable */
       const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            console.log(
-              `Post with title ` + entry.target.getElementsByClassName("movie_title") + ` is now visible.` 
-            );
+          var post_id = entry.target.getAttribute("id")
+          var curr_ele_state = {}
 
-            // this.movie_id_list.push(entry.target.getAttribute("title"))
+          // first call check if there is entry, initialize
+          if (!(post_id in this.post_call_bk)){
+            this.post_call_bk[post_id] = {
+              state: false,
+              timestamp: null,
+            }
+          } 
+          
+          // check state and replace
+          curr_ele_state = this.post_call_bk[post_id]
 
-            // entry.target.getAttribute("id") will give you the movie id
-
-            // for the first call of a movie id, start a time
-            // for the second call of a movie id do an api call to the backend and stop the timer
-            // for the third call start the timer again.
-            // type ScrollDataCaptured struct {
-            //     UserID           string    `json:"user_id"`
-            //     Timestamp        time.Time `json:"timestamp"`
-            //     DurationOfScroll int       `json:"duration_of_scroll"`
-            //     PostID           string    `json:"post_id"`
-            //   }
-
-            // Userid fabricated or it comes from cookie
-            // timestamp is time.now
-            // duration of scroll based on difference
-            // postid - entry.target.getAttribute("id")
-            
+          if (!(curr_ele_state.state)){
+            curr_ele_state.state = true
+            curr_ele_state.timestamp = Date.now()
           } else {
-            console.log(
-              // `Post with title ` + entry.target.getAttribute("id") + `is not visible.`
-            );
+            curr_ele_state.state = false
+            var diff = Date.now() - curr_ele_state.timestamp
+            curr_ele_state.timestamp == null
+
+
+            // call api
+            this.notifyEvent(post_id,diff,this.getCurrentUserID(), Date.now())
           }
+          this.post_call_bk[post_id]=curr_ele_state
+
         });
         console.log("Movie ID List: " + this.movie_id_list);
       }, options);
@@ -127,25 +88,15 @@ export default {
 
         movies.forEach((movie) => {
           const post = document.getElementById(movie.movie_id);
-          console.log("Posts,movie",post,movie.movie_id)
+          console.log("Posts,movie", post, movie.movie_id)
           observer.observe(post);
         });
       }, 2000);
-
-      // movies.forEach((movie) => {
-      //       const post = document.getElementById(`#${movie.movie_id}`);
-      //       observer.observe(post);
-      //     });
-      // movies.forEach((movie) => {
-      //   const post = document.getElementById(`#${movie.movie_id}`);
-      //   observer.observe(post);
-      // });
 
       return movies
     },
 
     handleScroll() {
-
       if (
         window.scrollY + window.innerHeight >=
         document.body.scrollHeight - 50

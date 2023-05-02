@@ -1,0 +1,31 @@
+            // this.movie_id_list.push(entry.target.getAttribute("title"))
+
+            // entry.target.getAttribute("id") will give you the movie id
+
+            // for the first call of a movie id, start a time
+            // for the second call of a movie id do an api call to the backend and stop the timer
+            // for the third call start the timer again.
+            // type ScrollDataCaptured struct {
+            //     UserID           string    `json:"user_id"`
+            //     Timestamp        time.Time `json:"timestamp"`
+            //     DurationOfScroll int       `json:"duration_of_scroll"`
+            //     PostID           string    `json:"post_id"`
+            //   }
+
+            // Userid fabricated or it comes from cookie
+            // timestamp is time.now
+            // duration of scroll based on difference
+            // postid - entry.target.getAttribute("id")
+
+
+
+// Saving old code
+        if (entry.isIntersecting) {
+            console.log(
+              `Post with title ` + entry.target.getAttribute("id") + `is visible.`
+            );
+          } else {
+            console.log(
+              `Post with title ` + entry.target.getAttribute("id") + `is not visible.`
+            );
+          }
