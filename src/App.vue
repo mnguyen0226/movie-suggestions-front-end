@@ -36,8 +36,8 @@ export default {
       return uuid;
     },
 
-    notifyEvent(post_id, time_diff, user_id, now_time){
-      console.log("Notify Event Call: " + post_id + " TD: " +  time_diff + " UI: " + user_id + " NT: "+ now_time)
+    notifyEvent(post_id, time_diff, user_id, now_time) {
+      console.log("Notify Event Call: " + post_id + " TD: " + time_diff + " UI: " + user_id + " NT: " + now_time)
       // record-scroll
       const url = 'http://localhost:3000/record-scroll';
 
@@ -63,6 +63,7 @@ export default {
         duration_of_scroll: time_diff,
         post_id: post_id
       };
+
       fetch(url, {
         method: 'POST',
         headers: {
@@ -79,8 +80,33 @@ export default {
         });
     },
 
+    fetch_api(mode) {
+      this.movie_list = []
+      this.current_tab = mode
+
+      // get movie
+      this.getMovies().then((response) => {
+        this.movie_list = [...this.movie_list, ...response]
+      });
+    },
+
     async getMovies() {
-      const movies = await fetch("http://localhost:3000/home-page", {}).then((response) => (response.json()))
+      var url = ""
+      var page_limit = 8
+      
+      console.log(this.movie_list.length)
+      var requested_pn = Math.floor(this.movie_list.length / page_limit) + 1
+      if (this.current_tab == "home-page") {
+        url = "http://localhost:3000/home-page?page="+requested_pn+"&limit="+page_limit
+      }
+      else if (this.current_tab == "suggestion-page") {
+        url = "http://localhost:3000/suggestion-page?page="+requested_pn+"&limit="+page_limit+"&userid=" + this.getCurrentUserID()
+      }
+      else if (this.current_tab == "trending-page") {
+        url = "http://localhost:3000/trending-page?page="+requested_pn+"&limit="+page_limit
+      }
+      console.log('getMovie() Call')
+      const movies = await fetch(url, {}).then((response) => (response.json()))
 
       const options = {
         root: null,
@@ -93,17 +119,17 @@ export default {
           var curr_ele_state = {}
 
           // first call check if there is entry, initialize
-          if (!(post_id in this.post_call_bk)){
+          if (!(post_id in this.post_call_bk)) {
             this.post_call_bk[post_id] = {
               state: false,
               timestamp: null,
             }
-          } 
-          
+          }
+
           // check state and replace
           curr_ele_state = this.post_call_bk[post_id]
 
-          if (!(curr_ele_state.state)){
+          if (!(curr_ele_state.state)) {
             curr_ele_state.state = true
             curr_ele_state.timestamp = Date.now()
           } else {
@@ -113,9 +139,9 @@ export default {
 
 
             // call api
-            this.notifyEvent(post_id,diff,this.getCurrentUserID(), Date.now())
+            this.notifyEvent(post_id, diff, this.getCurrentUserID(), Date.now())
           }
-          this.post_call_bk[post_id]=curr_ele_state
+          this.post_call_bk[post_id] = curr_ele_state
 
         });
         console.log("Movie ID List: " + this.movie_id_list);
@@ -168,11 +194,13 @@ export default {
       <h2>Select Recommendation Systems</h2>
       &nbsp;
       <div class="btn-group-vertical">
-        <button type="button" class="btn btn-primary rounded">All Movies</button>
+        <button type="button" class="btn btn-primary rounded" @click="fetch_api('home-page')">All Movies</button>
         &nbsp;
-        <button type="button" class="btn btn-secondary rounded">Recommended Movies</button>
+        <button type="button" class="btn btn-secondary rounded" @click="fetch_api('suggestion-page')">Recommended
+          Movies</button>
         &nbsp;
-        <button type="button" class="btn btn-secondary rounded">Most-watched + Stakeholder-paid Movies</button>
+        <button type="button" class="btn btn-secondary rounded" @click="fetch_api('trending-page')">Most-watched +
+          Stakeholder-paid Movies</button>
       </div>
     </div>
 
