@@ -193,12 +193,12 @@ export default {
     <div class="item-left sidebar-style" style="color:black; text-align: center;">
       &nbsp;
       <div class="btn-group-vertical">
-        <button type="button" class="btn btn-primary rounded" @click="fetch_api('home-page')">All Movies</button>
+        <button type="button" class="btn btn-light rounded" @click="fetch_api('home-page')">All Movies</button>
         &nbsp;
-        <button type="button" class="btn btn-secondary rounded" @click="fetch_api('suggestion-page')">Recommended
+        <button type="button" class="btn btn-light rounded" @click="fetch_api('suggestion-page')">Recommended
           Movies</button>
         &nbsp;
-        <button type="button" class="btn btn-secondary rounded" @click="fetch_api('trending-page')">Most-watched +
+        <button type="button" class="btn btn-light rounded" @click="fetch_api('trending-page')">Most-watched +
           Stakeholder-paid Movies</button>
       </div>
       <br/>
@@ -333,6 +333,17 @@ main {
 
 .btn-group button {
   display: block;
+
+  background-color: white;
+  color: black;
+  border: 2px solid blue;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.btn-group button:active {
+  background-color: blue;
+  color: white;
 }
 
 .sticky {
