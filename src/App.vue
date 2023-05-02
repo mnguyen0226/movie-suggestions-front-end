@@ -10,6 +10,7 @@ export default {
     return {
       movie_list: [],
       current_tab: "home-page"
+      // Declare as many ever maps that you want for bookkeeping
     };
   },
   components: {
@@ -38,9 +39,10 @@ export default {
     //  function getCurrentUserID() {
     //    //if the cookie is empty
     //    // if empty fabircate and id and set in cooke
-    //    //return from cookie
+    //    //return from cookie UUID
+    // https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
     //   }
-    
+
       for (let i = 0; i < 10; i++) {
         movie.push({
           title: movie_titles[
@@ -66,8 +68,26 @@ export default {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             console.log(
-              `Post with title ` + entry.target.getAttribute("id") + `is now visible.`
+              `Post with title ` + entry.target.getAttribute("id") + `is now visible.` 
             );
+
+            // entry.target.getAttribute("id") will give you the movie id
+
+            // for the first call of a movie id, start a time
+            // for the second call of a movie id do an api call to the backend and stop the timer
+            // for the third call start the timer again.
+            // type ScrollDataCaptured struct {
+            //     UserID           string    `json:"user_id"`
+            //     Timestamp        time.Time `json:"timestamp"`
+            //     DurationOfScroll int       `json:"duration_of_scroll"`
+            //     PostID           string    `json:"post_id"`
+            //   }
+
+            // Userid fabricated or it comes from cookie
+            // timestamp is time.now
+            // duration of scroll based on difference
+            // postid - entry.target.getAttribute("id")
+            
           } else {
             console.log(
               `Post with title ` + entry.target.getAttribute("id") + `is now visible.`
