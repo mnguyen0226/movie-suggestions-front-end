@@ -9,8 +9,30 @@ export default {
   data() {
     return {
       movie_list: [],
-      current_tab: "home-page"
+
+      current_tab: "home-page",
       // Declare as many ever maps that you want for bookkeeping
+      // movie_id, title, description, categories, image, actors, current_recommended_rate
+      movie_id_list: [],
+
+      // individual session
+          // movies[movie_id] = {
+          //   title
+          //   description
+          //   categories
+          //   image 
+          //   actors
+          //   current_recommended_rate
+          //   session[session_id] [
+          //     start-time, end-time, duration
+          //     ] // 1 session id for 1 user
+          //   }
+          // }
+
+      // create a hashmap of user in terms of what list of all attributes they visted => Use the hashmap to log 
+          // user[session_id] = {
+          //   movie_id[] = [1 2 3 4 5] # hashset
+          // }
     };
   },
   components: {
@@ -68,8 +90,10 @@ export default {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             console.log(
-              `Post with title ` + entry.target.getAttribute("id") + `is now visible.` 
+              `Post with title ` + entry.target.getElementsByClassName("movie_title") + ` is now visible.` 
             );
+
+            // this.movie_id_list.push(entry.target.getAttribute("title"))
 
             // entry.target.getAttribute("id") will give you the movie id
 
@@ -90,10 +114,11 @@ export default {
             
           } else {
             console.log(
-              `Post with title ` + entry.target.getAttribute("id") + `is now visible.`
+              // `Post with title ` + entry.target.getAttribute("id") + `is not visible.`
             );
           }
         });
+        console.log("Movie ID List: " + this.movie_id_list);
       }, options);
 
       // Observe all posts
