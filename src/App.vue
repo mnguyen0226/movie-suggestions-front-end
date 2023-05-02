@@ -1,5 +1,3 @@
-
-
 <script>
 import Post from "./components/MyPost.vue";
 
@@ -93,7 +91,7 @@ export default {
     async getMovies() {
       var url = ""
       var page_limit = 8
-      
+
       console.log(this.movie_list.length)
       var requested_pn = Math.floor(this.movie_list.length / page_limit) + 1
       if (this.current_tab == "home-page") {
@@ -184,14 +182,15 @@ export default {
 </script>
 
 <template>
-  <header class="sticky">
-    <h1>My Home Page</h1>
+  <header class="sticky header-style">
+    <h1>Scrollflix</h1>
   </header>
+  <br/>
+  <br/>
 
   <div class="parent">
 
-    <div class="item-left" style="color:black; text-align: center;">
-      <h2>Select Recommendation Systems</h2>
+    <div class="item-left sidebar-style" style="color:black; text-align: center;">
       &nbsp;
       <div class="btn-group-vertical">
         <button type="button" class="btn btn-primary rounded" @click="fetch_api('home-page')">All Movies</button>
@@ -202,16 +201,69 @@ export default {
         <button type="button" class="btn btn-secondary rounded" @click="fetch_api('trending-page')">Most-watched +
           Stakeholder-paid Movies</button>
       </div>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <div>
+        <p style="color:white; font-size: 2em; font-style: italic;" class="special-font">
+          Movie suggestion at your finger tip!
+        </p>
+      </div>  
+      <br/>    
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <p style="color:white; font-size: 1.5em;"><strong>Scrollflix</strong></p>
+      <div>
+        <i class="fab fa-youtube" style="color:white; font-size: 1.5em"></i>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <i class="fab fa-tiktok" style="color:white; font-size: 1.5em"></i>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <i class="fab fa-facebook" style="color:white; font-size: 1.5em"></i>
+      </div>
+      <br/>
+      <div>
+        <p style="color:white; font-size: 1em;">Contact | Careers | Direction</p>
+      </div>
+      <div>
+        <p style="color:white; font-size: 1em;">Copyright &copy; 2023. All Rights Reserved.</p>
+      </div>
     </div>
 
-    <div class="item-right last" style="text-align: center;">
-      <h2>Select Movies</h2>
-      &nbsp;
+    <div class="item-right last mainbar-style" style="text-align: center;">
       <Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" class="post" />
     </div>
   </div>
 
   <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 </template>
@@ -288,4 +340,43 @@ main {
   top: 0;
   width: 100%
 }
+
+.header-style {
+  background-color: black;
+  color: red;
+  padding: 1.2em;
+  border-bottom: 2px solid white;
+}
+
+.sidebar-style {
+  background-color: black;
+  color: white;
+  border-right: 2px solid white;
+}
+
+.mainbar-style {
+  background-color: black;
+  color: white;
+}
+
+.sidebar-pos {
+  position: relative;
+}
+
+.sidebar-footer-pos {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script&display=swap');
+
+.special-font {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2em;
+}
 </style>
+
+
