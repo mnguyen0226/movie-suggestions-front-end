@@ -8,3 +8,8 @@
   - vue create .
   - npm run serve <<< RUN
 
+Paginition,
+Data
+Test Back End
+Clean up Front End
+

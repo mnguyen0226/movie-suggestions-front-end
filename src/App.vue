@@ -38,6 +38,45 @@ export default {
 
     notifyEvent(post_id, time_diff, user_id, now_time){
       console.log("Notify Event Call: " + post_id + " TD: " +  time_diff + " UI: " + user_id + " NT: "+ now_time)
+      // record-scroll
+      const url = 'http://localhost:3000/record-scroll';
+
+      function formatTimeZoneOffset(offset) {
+        const sign = offset < 0 ? '+' : '-';
+        const absOffset = Math.abs(offset);
+        const hours = Math.floor(absOffset / 60);
+        const minutes = absOffset % 60;
+        return `${sign}${padNumber(hours)}:${padNumber(minutes)}`;
+      }
+
+      function padNumber(number) {
+        return number.toString().padStart(2, '0');
+      }
+
+      const date = new Date();
+
+      const rfc3339String = date.toISOString().replace('Z', formatTimeZoneOffset(date.getTimezoneOffset()));
+
+      const data = {
+        user_id: user_id,
+        timestamp: rfc3339String,
+        duration_of_scroll: time_diff,
+        post_id: post_id
+      };
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Successfully notified:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     },
 
     async getMovies() {
