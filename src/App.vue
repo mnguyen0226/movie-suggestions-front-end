@@ -5,82 +5,126 @@
 import Post from "./components/MyPost.vue";
 
 export default {
-	name: "App",
-	data() {
-		return {
-			movie_list: [],
-		};
-	},
-	components: {
-		Post,
-	},
-	methods: {
-		getMovie() {
-			const movie_titles = [
-				"Naruto",
-				"Demon Slayer",
-				"Dragon Ball",
-				"My Hero Academia",
-				"Sword Art Online",
-				"Tokyo Ghoul",
-				"Darling in the Franxx",
-				"Code Geass",
-				"One Piece",
-				"Fairy Tail",
-				"Bleach",
-				"Attack on Titan",
-				"Hunter x Hunter",
-			];
+  name: "App",
+  data() {
+    return {
+      movie_list: [],
+      current_tab: "home-page"
+    };
+  },
+  components: {
+    Post,
+  },
+  methods: {
+    getMovie() {
+      const movie_titles = [
+        "Naruto",
+        "Demon Slayer",
+        "Dragon Ball",
+        "My Hero Academia",
+        "Sword Art Online",
+        "Tokyo Ghoul",
+        "Darling in the Franxx",
+        "Code Geass",
+        "One Piece",
+        "Fairy Tail",
+        "Bleach",
+        "Attack on Titan",
+        "Hunter x Hunter",
+      ];
 
-			const movie = [];
+      const movie = [];
 
-			for (let i = 0; i < 10; i++) {
-				movie.push({
-					title: movie_titles[
-						Math.floor(Math.random() * movie_titles.length)
-					],
-					description:
-						"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-				});
-			}
+    //  function getCurrentUserID() {
+    //    //if the cookie is empty
+    //    // if empty fabircate and id and set in cooke
+    //    //return from cookie
+    //   }
+    
+      for (let i = 0; i < 10; i++) {
+        movie.push({
+          title: movie_titles[
+            Math.floor(Math.random() * movie_titles.length)
+          ],
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        });
+      }
 
-			return movie;
-		},
+      return movie;
+    },
 
     async getMovies() {
-      const movies = await fetch("http://localhost:3000/home-page", {}).then((response)=>(response.json()))
+      const movies = await fetch("http://localhost:3000/home-page", {}).then((response) => (response.json()))
+
+      const options = {
+        root: null,
+        threshold: [0.5],
+      };
+      /*eslint-disable */
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            console.log(
+              `Post with title ` + entry.target.getAttribute("id") + `is now visible.`
+            );
+          } else {
+            console.log(
+              `Post with title ` + entry.target.getAttribute("id") + `is now visible.`
+            );
+          }
+        });
+      }, options);
+
+      // Observe all posts
+
+      setTimeout(async () => {
+
+        movies.forEach((movie) => {
+          const post = document.getElementById(movie.movie_id);
+          console.log("Posts,movie",post,movie.movie_id)
+          observer.observe(post);
+        });
+      }, 2000);
+
+      // movies.forEach((movie) => {
+      //       const post = document.getElementById(`#${movie.movie_id}`);
+      //       observer.observe(post);
+      //     });
+      // movies.forEach((movie) => {
+      //   const post = document.getElementById(`#${movie.movie_id}`);
+      //   observer.observe(post);
+      // });
+
       return movies
     },
 
-		handleScroll() {
-      console.log("Window Size:", window.scrollY + window.innerHeight);
-      console.log("Threshold: ", document.body.scrollHeight - 50)
-			if (
-				window.scrollY + window.innerHeight >=
-				document.body.scrollHeight - 50
-			) {
-        console.log("activate")
-        this.getMovies().then((response)=>{
-          console.log(response)
+    handleScroll() {
+
+      if (
+        window.scrollY + window.innerHeight >=
+        document.body.scrollHeight - 50
+      ) {
+        this.getMovies().then((response) => {
           this.movie_list = [...this.movie_list, ...response]
         });
-			}
-		},
-	},
+      }
+    },
+  },
 
-	mounted() {
-		this.movie_list = this.getMovies().then((response)=>{
-      console.log("checking on first init",response)
+  mounted() {
+    this.movie_list = this.getMovies().then((response) => {
+      console.log("checking on first init", response)
       this.movie_list = response
     });
-		window.addEventListener("scroll", this.handleScroll); // if scroll, then function handleScroll() works automatically.
-	},
+    window.addEventListener("scroll", this.handleScroll); // if scroll, then function handleScroll() works automatically.
+  },
 };
 </script>
 
 <template>
   <header class="sticky">
-    <h1 >My Home Page</h1>
+    <h1>My Home Page</h1>
   </header>
 
   <div class="parent">
@@ -96,45 +140,47 @@ export default {
         <button type="button" class="btn btn-secondary rounded">Most-watched + Stakeholder-paid Movies</button>
       </div>
     </div>
-    
+
     <div class="item-right last" style="text-align: center;">
       <h2>Select Movies</h2>
       &nbsp;
-      <Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" />
+      <Post v-for="(movie, i) in movie_list" :key="i" :movie="movie" class="post" />
     </div>
   </div>
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"></template>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</template>
 
 <style>
 * {
-	margin: 0;
-	box-sizing: border-box;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	color: #fff;
-	background-color: #2c3e50;
-	min-height: 100vh;
-	padding-top: 3rem;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  background-color: #2c3e50;
+  min-height: 100vh;
+  padding-top: 3rem;
 }
 
 header h1 {
-	text-align: center;
+  text-align: center;
 }
 
 header {
-	margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 main {
-	padding: 0 2rem;
-	max-width: 640px;
-	margin: 0 auto;
+  padding: 0 2rem;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 .parent {
@@ -145,7 +191,7 @@ main {
 .item-left {
   width: 25%;
   height: 100%;
-  position:fixed;
+  position: fixed;
 
   padding: 2em;
   color: #ffffff;
@@ -158,7 +204,7 @@ main {
   flex: 1;
   margin-left: 25%;
 
-  
+
   padding: 2em;
   color: #ffffff;
   background: #eeeeee;
