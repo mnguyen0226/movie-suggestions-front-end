@@ -8,12 +8,15 @@ Backend code can be found [here](https://github.com/Harishgeth/movie-suggestions
 
 ## Demo
 Home Page
+
 <img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/home_page.gif" alt="alt text" width="200">
 
 Scroll Suggestion
+
 <img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/movie_suggestion.gif" alt="alt text" width="200">
 
 Movie Trend
+
 <img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/movie_trend.gif" alt="alt text" width="200">
 
 ## Design
@@ -40,6 +43,7 @@ Run Vue single-page application
 ```sh
 npm run serve
 ```
+
 ## Unit Test
 
 ## Tools
