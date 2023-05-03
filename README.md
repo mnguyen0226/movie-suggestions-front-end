@@ -15,25 +15,25 @@
 ## Demo
 Home Page
 <br/>
-<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/home_page.gif" alt="alt text" width="200">
+<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/home_page.gif" alt="alt text">
 
 Scroll Suggestion
 <br/>
-<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/movie_suggestion.gif" alt="alt text" width="200">
+<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/movie_suggestion.gif" alt="alt text">
 
 Movie Trend
 <br/>
-<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/movie_trend.gif" alt="alt text" width="200">
+<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/movie_trend.gif" alt="alt text">
 
 ## Architecture Designs
-<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/overall_arc.png" alt="alt text" width="200">
+<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/overall_arc.png" alt="alt text">
 
 
 ### Frontend
-<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/frontend_arc.png" alt="alt text" width="200">
+<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/frontend_arc.png" alt="alt text">
 
 ### Backend
-<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/backend_arc.png" alt="alt text" width="200">
+<img src="https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/backend_arc.png" alt="alt text">
 
 
 ## How to Run
