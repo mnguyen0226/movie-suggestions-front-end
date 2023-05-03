@@ -8,6 +8,7 @@ export default {
       movie_list: [],
       current_tab: "home-page",
       post_call_bk: {}, // book keeping
+      dom_observers:[] // book keeping dom observers
     };
   },
   components: {
@@ -34,8 +35,7 @@ export default {
       return uuid;
     },
 
-    notifyEvent(post_id, time_diff, user_id, now_time) {
-      console.log("Notify Event Call: " + post_id + " TD: " + time_diff + " UI: " + user_id + " NT: " + now_time)
+    notifyEvent(post_id, time_diff, user_id) {
       // record-scroll
       const url = 'http://localhost:3000/record-scroll';
 
@@ -55,7 +55,7 @@ export default {
 
       const rfc3339String = date.toISOString().replace('Z', formatTimeZoneOffset(date.getTimezoneOffset()));
 
-      const data = {
+      const request = {
         user_id: user_id,
         timestamp: rfc3339String,
         duration_of_scroll: time_diff,
@@ -67,11 +67,13 @@ export default {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(request)
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Successfully notified:', data);
+          var dom=document.getElementById(request.post_id)
+          console.log("DOM Element:",dom.getElementsByClassName("movie_title")[0].innerHTML,request.post_id,request.duration_of_scroll,data)
+          // console.log('Successfully notified:',request.post_id,request.duration_of_scroll,data);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -111,50 +113,57 @@ export default {
         threshold: [0.5],
       };
       /*eslint-disable */
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-          var post_id = entry.target.getAttribute("id")
-          var curr_ele_state = {}
+      if (this.current_tab == "home-page"){
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            var post_id = entry.target.getAttribute("id")
+            var curr_ele_state = {}
 
-          // first call check if there is entry, initialize
-          if (!(post_id in this.post_call_bk)) {
-            this.post_call_bk[post_id] = {
-              state: false,
-              timestamp: null,
+            // first call check if there is entry, initialize
+            if (!(post_id in this.post_call_bk)) {
+              this.post_call_bk[post_id] = {
+                state: false,
+                timestamp: null,
+              }
             }
-          }
 
-          // check state and replace
-          curr_ele_state = this.post_call_bk[post_id]
+            // check state and replace
+            curr_ele_state = this.post_call_bk[post_id]
 
-          if (!(curr_ele_state.state)) {
-            curr_ele_state.state = true
-            curr_ele_state.timestamp = Date.now()
-          } else {
-            curr_ele_state.state = false
-            var diff = Date.now() - curr_ele_state.timestamp
-            curr_ele_state.timestamp == null
+            if (!(curr_ele_state.state)) {
+              curr_ele_state.state = true
+              curr_ele_state.timestamp = Date.now()
+            } else {
+              curr_ele_state.state = false
+              var diff = Date.now() - curr_ele_state.timestamp
+              curr_ele_state.timestamp == null
 
 
-            // call api
-            this.notifyEvent(post_id, diff, this.getCurrentUserID(), Date.now())
-          }
-          this.post_call_bk[post_id] = curr_ele_state
+              // call api
+              this.notifyEvent(post_id, diff, this.getCurrentUserID())
+            }
+            this.post_call_bk[post_id] = curr_ele_state
 
-        });
-        console.log("Movie ID List: " + this.movie_id_list);
-      }, options);
+          });
+          console.log("Movie ID List: " + this.movie_id_list);
+        }, options);
+        setTimeout(async () => {
 
-      // Observe all posts
-
-      setTimeout(async () => {
-
-        movies.forEach((movie) => {
-          const post = document.getElementById(movie.movie_id);
-          console.log("Posts,movie", post, movie.movie_id)
-          observer.observe(post);
-        });
-      }, 2000);
+          movies.forEach((movie) => {
+            const post = document.getElementById(movie.movie_id);
+            console.log("Posts,movie", post, movie.movie_id)
+            observer.observe(post);
+            this.dom_observers.push(observer);
+          });
+        }, 2000);
+      } else{
+        if (this.dom_observers.length > 0){
+          this.dom_observers.forEach((observer) => {
+            observer.disconnect();
+          });
+        }
+        this.dom_observers=[]
+      }
 
       return movies
     },
@@ -164,9 +173,12 @@ export default {
         window.scrollY + window.innerHeight >=
         document.body.scrollHeight - 50
       ) {
-        this.getMovies().then((response) => {
-          this.movie_list = [...this.movie_list, ...response]
-        });
+        if(this.current_tab=="home-page"){
+            this.getMovies().then((response) => {
+            this.movie_list = [...this.movie_list, ...response]
+          });
+        }
+
       }
     },
   },
