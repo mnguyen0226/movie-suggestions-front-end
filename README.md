@@ -92,6 +92,13 @@ Use the Discover tab of Analytics to create a data view with these index pattern
 
 ## Unit Test
 
+
 ## Tools
+- **Frontends:** Vue.js, HTML, CSS, Javascript, Bootstrap, Mozilla InteractionObserver API.
+- **Backends:** Filebeat, Kibana, ElasticSearch, Vector, Go, Python, MongoDB, Docker.
+- **Development Tools:** VSCode, Postman, ElasticSearch, Docker.
+- **Teamwork Tools:** Slack, Git.
 
 ## References
+- [Presentation](https://github.com/mnguyen0226/movie-suggestions-front-end/blob/main/docs/presentation.pdf).
+- [Report]().
